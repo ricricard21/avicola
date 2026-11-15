@@ -10,6 +10,7 @@ import { api, mensajeDe, refrescar, useApi } from '@/lib/api';
 import { ETAPAS, METODO, SEGUIMIENTO } from '@/lib/etiquetas';
 import { fecha, pesos, relativa, telefono } from '@/lib/formato';
 import { useSesion } from '@/lib/sesion';
+import { enlace } from '@/lib/transporte';
 import type { ClienteDetalle, Seguimiento } from '@/lib/tipos';
 
 const ICONO_SEGUIMIENTO: Record<Seguimiento['tipo'], ReactNode> = {
@@ -164,7 +165,7 @@ export default function DetalleCliente() {
                   </thead>
                   <tbody>
                     {c.pagos.map((g) => (
-                      <tr key={g.id} className={cx(filaClic, g.cancelado && 'opacity-50')} onClick={() => window.open(`/recibo/${g.id}`, '_blank')}>
+                      <tr key={g.id} className={cx(filaClic, g.cancelado && 'opacity-50')} onClick={() => window.open(enlace(`/recibo/${g.id}`), '_blank')}>
                         <Td>
                           <Folio>{g.folio}</Folio>
                           {g.cancelado && <Insignia className="ml-2">Cancelado</Insignia>}

@@ -1,0 +1,210 @@
+/* ------------------------------------------------------------------
+   Sistema de diseño · Avícola San Ángel
+   Dirección: orgánico premium. Cáscara y yema de día, granero de noche.
+   Un solo color de acento (yema) para toda acción principal.
+------------------------------------------------------------------- */
+
+:root {
+  --base: #f4eee2;
+  --surface: #fffcf5;
+  --surface-2: #efe7d7;
+  --surface-3: #e4d9c4;
+  --line: rgb(74 56 28 / 0.14);
+  --line-strong: rgb(74 56 28 / 0.26);
+  --ink: #2b2117;
+  --muted: #7a6a56;
+  --accent: #e9a21b;
+  --accent-ink: #2b2117;
+  --accent-text: #9c6200;
+  --ok: #47743a;
+  --bad: #b03f2c;
+  --info: #35668a;
+  --glass: rgb(255 252 245 / 0.82);
+  --shadow: 0 1px 2px rgb(74 56 28 / 0.06), 0 8px 24px -12px rgb(74 56 28 / 0.18);
+  --shadow-pop: 0 18px 50px -12px rgb(60 42 14 / 0.35);
+  --glow: 0 6px 22px -6px rgb(233 162 27 / 0.55);
+  --halo: rgb(233 162 27 / 0.16);
+  color-scheme: light;
+}
+
+[data-tema='noche'] {
+  --base: #14100b;
+  --surface: #1d1710;
+  --surface-2: #282017;
+  --surface-3: #34291d;
+  --line: rgb(255 236 204 / 0.1);
+  --line-strong: rgb(255 236 204 / 0.2);
+  --ink: #f4ebdd;
+  --muted: #a59783;
+  --accent: #f4b43f;
+  --accent-ink: #1b140b;
+  --accent-text: #f4b43f;
+  --ok: #93c47a;
+  --bad: #ee8a74;
+  --info: #8bbbd9;
+  --glass: rgb(34 27 19 / 0.78);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 10px 30px -14px rgb(0 0 0 / 0.6);
+  --shadow-pop: 0 20px 60px -10px rgb(0 0 0 / 0.75);
+  --glow: 0 0 26px -4px rgb(244 180 63 / 0.55);
+  --halo: rgb(244 180 63 / 0.1);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-base: var(--base);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-text: var(--accent-text);
+  --color-ok: var(--ok);
+  --color-bad: var(--bad);
+  --color-info: var(--info);
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-sans: 'DM Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --shadow-card: var(--shadow);
+  --shadow-pop: var(--shadow-pop);
+  --shadow-glow: var(--glow);
+  --radius-card: 18px;
+}
+
+html {
+  background: var(--base);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background:
+    radial-gradient(900px 520px at 100% -10%, var(--halo), transparent 70%),
+    radial-gradient(700px 480px at -10% 110%, var(--halo), transparent 70%),
+    var(--base);
+  background-attachment: fixed;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  font-optical-sizing: auto;
+}
+
+h1,
+h2,
+.display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+}
+
+.cifra {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.03em;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.folio {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Las columnas de una cuadrícula pueden encogerse: las tablas anchas se desplazan dentro
+   de su tarjeta en lugar de ensanchar toda la página en el celular. */
+main .grid > * {
+  min-width: 0;
+}
+
+/* Barras de desplazamiento discretas */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-3) transparent;
+}
+
+/* Tonos para insignias y avisos: mezcla del color con la superficie */
+.tono-ambar { --t: var(--accent-text); }
+.tono-verde { --t: var(--ok); }
+.tono-rojo { --t: var(--bad); }
+.tono-azul { --t: var(--info); }
+.tono-neutro { --t: var(--muted); }
+.tono {
+  color: var(--t);
+  background: color-mix(in srgb, var(--t) 13%, transparent);
+  border-color: color-mix(in srgb, var(--t) 26%, transparent);
+}
+
+/* Vidrio: menús, encabezado y diálogos */
+.vidrio {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
+}
+
+/* Entrada escalonada de las secciones de cada pantalla */
+@keyframes subir {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* "backwards": al terminar no queda ningún transform aplicado; así las secciones no crean
+   su propio contexto de apilamiento y los menús desplegables pueden salir por encima de la siguiente. */
+.entrada > * {
+  animation: subir 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+.entrada > *:nth-child(2) { animation-delay: 0.06s; }
+.entrada > *:nth-child(3) { animation-delay: 0.12s; }
+.entrada > *:nth-child(4) { animation-delay: 0.18s; }
+.entrada > *:nth-child(5) { animation-delay: 0.24s; }
+.entrada > *:nth-child(n + 6) { animation-delay: 0.3s; }
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(6px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+.aparecer { animation: aparecer 0.18s ease-out both; }
+
+@keyframes crecer {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+.barra { transform-origin: bottom; animation: crecer 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+@keyframes latir {
+  50% { opacity: 0.45; }
+}
+.esqueleto {
+  background: var(--surface-2);
+  border-radius: 10px;
+  animation: latir 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Comprobante: al imprimir solo sale el recibo, en blanco y negro limpio */
+@media print {
+  html, body { background: #fff !important; }
+  .no-imprimir { display: none !important; }
+  .recibo { box-shadow: none !important; border: none !important; margin: 0 !important; max-width: none !important; }
+}

@@ -29,6 +29,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { api, mensajeDe, useApi } from '@/lib/api';
 import { iniciales } from '@/lib/formato';
 import { useSesion, useTema } from '@/lib/sesion';
+import { MODO_DEMO, reiniciarDemo } from '@/lib/transporte';
 import { Boton, Campo, cx, Entrada, Modal, PieModal, useAviso } from './ui';
 
 const ICONO = { size: 18, strokeWidth: 1.5 } as const;
@@ -211,7 +212,9 @@ export function Shell({ children }: { children: ReactNode }) {
   const [menu, setMenu] = useState(false);
   const [tema, alternarTema] = useTema();
   const ruta = usePathname();
-  useEffect(() => setMenu(false), [ruta]);
+  useEffect(() => {
+    setMenu(false);
+  }, [ruta]);
 
   return (
     <div className="min-h-dvh lg:pl-64">
@@ -259,6 +262,22 @@ export function Shell({ children }: { children: ReactNode }) {
           <MenuUsuario />
         </div>
       </header>
+
+      {MODO_DEMO && (
+        <div className="no-imprimir tono tono-ambar flex flex-wrap items-center justify-center gap-x-4 gap-y-1 border-b px-4 py-2 text-center text-[13px]">
+          <span className="text-ink/85">
+            <strong className="font-semibold">Versión de demostración.</strong> Lo que captures se guarda solo en este navegador.
+          </span>
+          <button
+            onClick={() => {
+              if (window.confirm('¿Borrar lo capturado y volver a los datos de ejemplo?')) reiniciarDemo();
+            }}
+            className="font-semibold underline underline-offset-2 hover:no-underline"
+          >
+            Reiniciar datos
+          </button>
+        </div>
+      )}
 
       <main className="mx-auto w-full max-w-[1320px] px-4 py-6 sm:px-6 sm:py-8">{children}</main>
     </div>

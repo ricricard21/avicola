@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Boton, Campo, Entrada } from '@/components/ui';
 import { api, mensajeDe, sesionLocal } from '@/lib/api';
+import { MODO_DEMO, USUARIOS_DEMO } from '@/lib/transporte';
 
 export default function Login() {
   const router = useRouter();
@@ -104,7 +105,30 @@ export default function Login() {
             Entrar <ArrowRight size={17} strokeWidth={1.75} />
           </Boton>
 
-          <p className="mt-8 text-center text-xs text-muted">¿Olvidaste tu contraseña? Pide a Dirección que la restablezca.</p>
+          {MODO_DEMO ? (
+            <div className="mt-8 rounded-2xl border border-line bg-surface p-4">
+              <p className="text-[11px] font-semibold tracking-[0.08em] text-muted uppercase">Demostración · entra con un clic</p>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                {USUARIOS_DEMO.map((u) => (
+                  <button
+                    key={u.email}
+                    type="button"
+                    onClick={() => {
+                      setEmail(u.email);
+                      setPassword(u.clave);
+                      setError('');
+                    }}
+                    className="rounded-xl border border-line px-3 py-2 text-left text-[13px] transition-colors hover:border-accent hover:bg-surface-2"
+                  >
+                    {u.rol}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-3 text-xs text-muted">Elige un puesto y presiona Entrar. Cada uno ve solo sus módulos.</p>
+            </div>
+          ) : (
+            <p className="mt-8 text-center text-xs text-muted">¿Olvidaste tu contraseña? Pide a Dirección que la restablezca.</p>
+          )}
         </form>
       </div>
     </div>

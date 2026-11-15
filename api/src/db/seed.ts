@@ -302,7 +302,7 @@ async function sembrarDemo(app: Awaited<ReturnType<typeof NestFactory.createAppl
       await ds.query(`UPDATE pedidos SET "createdAt" = ${creado}, "confirmadoAt" = ${creado} WHERE id = $1`, [e.pedido.id]);
       await ds.query(`UPDATE inscripciones SET "createdAt" = ${creado} WHERE id = $1`, [e.id]);
       await ds.query(`UPDATE pagos SET fecha = ${creado} + INTERVAL '10 minutes' WHERE "pedidoId" = $1`, [e.pedido.id]);
-      await ds.query(`UPDATE notificaciones SET "createdAt" = ${creado} WHERE referencia = $1 OR referencia = $2`, [e.folio, e.pedido.folio]);
+      await ds.query(`UPDATE notificaciones SET "createdAt" = ${creado} WHERE referencia = $1 OR referencia = $2 OR referencia IN (SELECT folio FROM pagos WHERE "pedidoId" = $3)`, [e.folio, e.pedido.folio, e.pedido.id]);
     }
   }
 

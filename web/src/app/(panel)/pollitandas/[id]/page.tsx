@@ -195,7 +195,9 @@ function ModalExpediente({ id, onCerrar, onCobrar }: { id: number | null; onCerr
   const aviso = useAviso();
   const { data: e, error } = useApi<ExpedienteDetalle>(id ? `/pollitandas/expedientes/${id}` : null);
   const [baja, setBaja] = useState(false);
-  useEffect(() => setBaja(false), [id]);
+  useEffect(() => {
+    setBaja(false);
+  }, [id]);
 
   if (!id) return null;
   const vigente = e && e.estado !== 'CANCELADO' && e.estado !== 'ENTREGADO';

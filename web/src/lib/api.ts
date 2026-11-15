@@ -1,8 +1,8 @@
 'use client';
 
 import useSWR, { mutate as mutarGlobal, SWRConfiguration } from 'swr';
+import { enviar, irALogin } from '@/lib/transporte';
 
-export const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api').replace(/\/$/, '');
 const CLAVE_TOKEN = 'asa.token';
 
 export class ErrorApi extends Error {
@@ -23,28 +23,19 @@ export const sesionLocal = {
 
 /** Llamada a la API con la sesión del usuario. Lanza ErrorApi con el mensaje listo para mostrarse. */
 export async function api<T = unknown>(ruta: string, opciones: { metodo?: 'GET' | 'POST' | 'PATCH'; cuerpo?: unknown } = {}): Promise<T> {
-  const token = sesionLocal.leer();
-  let respuesta: Response;
+  const metodo = opciones.metodo ?? (opciones.cuerpo === undefined ? 'GET' : 'POST');
+  let respuesta: { estado: number; datos: { mensaje?: string; codigo?: string } & Record<string, unknown> };
   try {
-    respuesta = await fetch(`${API_URL}${ruta}`, {
-      method: opciones.metodo ?? (opciones.cuerpo === undefined ? 'GET' : 'POST'),
-      headers: {
-        ...(opciones.cuerpo !== undefined ? { 'Content-Type': 'application/json' } : {}),
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      body: opciones.cuerpo !== undefined ? JSON.stringify(opciones.cuerpo) : undefined,
-      cache: 'no-store',
-    });
+    respuesta = await enviar(metodo, ruta, opciones.cuerpo, sesionLocal.leer());
   } catch {
     throw new ErrorApi('No hay conexión con el servidor. Revisa tu internet e inténtalo de nuevo.', 0);
   }
-  if (respuesta.status === 401 && !ruta.startsWith('/auth/login')) {
+  if (respuesta.estado === 401 && !ruta.startsWith('/auth/login')) {
     sesionLocal.borrar();
-    if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) window.location.assign('/login');
+    irALogin();
   }
-  const datos = await respuesta.json().catch(() => ({}));
-  if (!respuesta.ok) throw new ErrorApi(datos.mensaje || 'Ocurrió un error inesperado', respuesta.status, datos.codigo);
-  return datos as T;
+  if (respuesta.estado >= 400) throw new ErrorApi(respuesta.datos.mensaje || 'Ocurrió un error inesperado', respuesta.estado, respuesta.datos.codigo);
+  return respuesta.datos as T;
 }
 
 /** Lectura con caché y actualización automática. Pasar null para no consultar todavía. */

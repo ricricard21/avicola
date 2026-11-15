@@ -4,13 +4,31 @@ Administración comercial: usuarios y permisos, clientes (CRM), ventas, Pollitan
 
 ```
 avicola-san-angel/
-├── api/     API (NestJS 11 + TypeORM + PostgreSQL)   → servicio "api" en Railway
-├── web/     Panel (Next.js 16 + React 19 + Tailwind) → servicio "web" en Railway
+├── index.html   Demostración lista: todo el sistema en un archivo, corre en el navegador (GitHub Pages)
+├── api/         API (NestJS 11 + TypeORM + PostgreSQL)   → servicio "api" en Railway
+├── web/         Panel (Next.js 16 + React 19 + Tailwind) → servicio "web" en Railway
+├── demo/        Fuente de la demostración: las pantallas de web/ + un motor que sustituye a la API
 ├── docker-compose.yml   PostgreSQL local para desarrollo
 └── README.md
 ```
 
-Las dos carpetas van **tal cual en la raíz del repositorio**. Cada una es un servicio independiente con su propio `package.json`.
+Todo va **tal cual en la raíz del repositorio**.
+
+## Demostración sin servidor (GitHub Pages)
+
+`index.html` es el sistema completo en un solo archivo: mismas pantallas y mismas reglas de negocio, sin servidor ni base de datos. Con GitHub Pages activo en la rama `main` (carpeta raíz) queda en `https://<usuario>.github.io/<repo>/`. También abre con doble clic desde la computadora.
+
+- En la pantalla de entrada hay un botón por puesto (Director, Ventas, Almacén, Cobranza, Logística, Granja).
+- Lo que se captura se guarda **solo en ese navegador**: cada persona ve su propia copia y "Reiniciar datos" la regresa al ejemplo. Sirve para presentar, capacitar y probar; para operar entre varios usuarios se usa la versión con servidor (abajo).
+- El motor de la demo (`demo/src/backend`) da exactamente los mismos números que la API: `npm test` en `demo/` lo comprueba, y con `API_REAL=http://localhost:4000/api npm test` los compara contra la API recién sembrada.
+
+Para regenerar `index.html` después de cambiar pantallas o reglas:
+
+```bash
+cd demo
+npm install
+npm run build        # compila y copia el resultado a ../index.html
+```
 
 ## Arrancar en local
 

@@ -1,4 +1,6 @@
-import { Rol } from '../db/entities';
+/** Puestos del sistema. Este archivo no depende de nada más: lo usan la API y la demostración. */
+export const ROLES = ['DIRECTOR', 'ADMIN', 'VENTAS', 'INVENTARIO', 'COBRANZA', 'LOGISTICA', 'GRANJA'] as const;
+export type Rol = (typeof ROLES)[number];
 
 /**
  * Catálogo de permisos del sistema. Cada permiso es "módulo.acción".

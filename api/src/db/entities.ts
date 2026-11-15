@@ -12,13 +12,14 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
+import { Rol, ROLES } from '../common/permisos';
 
 /* ------------------------------------------------------------------ */
 /*  Tipos de catálogo (se guardan como texto para migraciones simples)  */
 /* ------------------------------------------------------------------ */
 
-export const ROLES = ['DIRECTOR', 'ADMIN', 'VENTAS', 'INVENTARIO', 'COBRANZA', 'LOGISTICA', 'GRANJA'] as const;
-export type Rol = (typeof ROLES)[number];
+export { ROLES };
+export type { Rol };
 
 export const TIPOS_CLIENTE = ['PROSPECTO', 'CLIENTE', 'DISTRIBUIDOR'] as const;
 export type TipoCliente = (typeof TIPOS_CLIENTE)[number];
